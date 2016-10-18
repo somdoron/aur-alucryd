@@ -1,0 +1,24 @@
+diff -aur audience.pristine/src/Widgets/PlayerPage.vala audience.new/src/Widgets/PlayerPage.vala
+--- audience.pristine/src/Widgets/PlayerPage.vala	2016-10-18 01:27:27.306149705 +0300
++++ audience.new/src/Widgets/PlayerPage.vala	2016-10-18 01:29:24.186147174 +0300
+@@ -72,7 +72,7 @@
+             stage.background_color = {0, 0, 0, 0};
+ 
+             video_actor = new Clutter.Actor ();
+-            var aspect_ratio = ClutterGst.Aspectratio.@new ();
++            var aspect_ratio = new ClutterGst.Aspectratio ();
+             ((ClutterGst.Aspectratio) aspect_ratio).paint_borders = false;
+             ((ClutterGst.Content) aspect_ratio).player = playback;
+             /* Commented because of a bug in the compositor
+diff -aur audience.pristine/src/Widgets/PreviewPopover.vala audience.new/src/Widgets/PreviewPopover.vala
+--- audience.pristine/src/Widgets/PreviewPopover.vala	2016-10-18 01:27:27.306149705 +0300
++++ audience.new/src/Widgets/PreviewPopover.vala	2016-10-18 01:28:42.539481409 +0300
+@@ -65,7 +65,7 @@
+         stage.background_color = {0, 0, 0, 0};
+ 
+         var video_actor = new Clutter.Actor ();
+-        var aspect_ratio = ClutterGst.Aspectratio.@new ();
++        var aspect_ratio = new ClutterGst.Aspectratio ();
+         ((ClutterGst.Aspectratio) aspect_ratio).paint_borders = false;
+         ((ClutterGst.Content) aspect_ratio).player = playback;
+         video_actor.content = aspect_ratio;
