@@ -1,7 +1,7 @@
 # Maintainer: Maxime Gauduin <alucryd@archlinux.org>
 
 pkgname=capnet-assist
-pkgver=0.2.0.1
+pkgver=0.2.0.1+r99
 pkgrel=1
 pkgdesc='Captive Portal Assistant'
 arch=('i686' 'x86_64')
@@ -10,11 +10,17 @@ license=('GPL3')
 groups=('pantheon')
 depends=('gcr' 'glib2' 'glibc' 'gtk3' 'libsoup' 'networkmanager' 'webkit2gtk')
 makedepends=('cmake' 'intltool' 'vala')
-source=("https://launchpad.net/capnet-assist/loki/${pkgver}/+download/capnet-assist-${pkgver}.tar.xz")
-sha256sums=('d278b62940d985a55e00b1e17be3e336949be9d89e165bc744226afcfd624e44')
+source=("capnet-assist::bzr+lp:capnet-assist/loki")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd capnet-assist
+
+  echo "0.2.0.1+r$(bzr revno)"
+}
 
 prepare() {
-  cd capnet-assist-${pkgver}
+  cd capnet-assist
 
   if [[ -d build ]]; then
     rm -rf build
@@ -23,7 +29,7 @@ prepare() {
 }
 
 build() {
-  cd capnet-assist-${pkgver}/build
+  cd capnet-assist/build
 
   cmake .. \
     -DCMAKE_BUILD_TYPE='Release' \
@@ -32,7 +38,7 @@ build() {
 }
 
 package() {
-  cd capnet-assist-${pkgver}/build
+  cd capnet-assist/build
 
   make DESTDIR="${pkgdir}" install
 }
