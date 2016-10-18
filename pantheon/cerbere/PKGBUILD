@@ -1,7 +1,7 @@
 # Maintainer: Maxime Gauduin <alucryd@archlinux.org>
 
 pkgname=cerbere
-pkgver=0.2.1
+pkgver=0.2.2+r52
 pkgrel=1
 pkgdesc='The Pantheon Watchdog'
 arch=('i686' 'x86_64')
@@ -11,17 +11,17 @@ groups=('pantheon')
 depends=('dconf' 'libgee')
 makedepends=('cmake' 'vala')
 install='cerbere.install'
-source=("https://launchpad.net/cerbere/${pkgver%%.*}.x/${pkgver}/+download/cerbere-${pkgver}.tgz")
-sha256sums=('6d585290105558fe8adf1554228c8650aae1a0cec1457a2614d3c9d78a129606')
+source=("cerbere::bzr+lp:cerbere/loki")
+sha256sums=('SKIP')
 
-prepare() {
-  cd cerbere-${pkgver}
+pkgver() {
+  cd cerbere
 
-  sed "s/'wingpanel','plank','slingshot-launcher --silent'/'gala','wingpanel','plank','slingshot-launcher --silent'/" -i org.pantheon.cerbere.gschema.xml
+  echo "0.2.2+r$(bzr revno)"
 }
 
 build() {
-  cd cerbere-${pkgver}
+  cd cerbere
 
   if [[ -d build ]]; then
     rm -rf build
@@ -36,7 +36,7 @@ build() {
 }
 
 package() {
-  cd cerbere-${pkgver}/build
+  cd cerbere/build
 
   make DESTDIR="${pkgdir}" install
 }
