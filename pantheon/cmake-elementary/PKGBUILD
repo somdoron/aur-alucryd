@@ -1,0 +1,43 @@
+pkgname=cmake-elementary
+pkgver=0.1.0.0+r27
+pkgrel=1
+pkgdesc='Extra CMake utility modules for elementary.'
+arch=('i686' 'x86_64')
+url='https://code.launchpad.net/~elementary-os/+junk/cmake-modules'
+license=('GPL3')
+groups=('pantheon')
+depends=('cmake' 'intltool')
+makedepends=('bzr')
+provides=('cmake-elementary')
+conflicts=('cmake-elementary')
+source=('cmake-elementary::bzr+lp:~elementary-os/+junk/cmake-modules')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd cmake-elementary
+
+  echo "0.1.0.0+r$(bzr revno)"
+}
+
+build() {
+  cd cmake-elementary
+
+  if [[ -d build ]]; then
+    rm -rf build
+  fi
+  mkdir build && cd build
+
+  cmake .. \
+    -DCMAKE_BUILD_TYPE='Release' \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -DGSETTINGS_COMPILE='OFF'
+  make
+}
+
+package() {
+  cd cmake-elementary/build
+
+  make DESTDIR="${pkgdir}" install
+}
+
+# vim: ts=2 sw=2 et:
