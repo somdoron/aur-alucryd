@@ -1,0 +1,68 @@
+# Maintainer: Maxime Gauduin <alucryd@archlinux.org>
+# Contributor: Ner0 <darkelfdarkelf666@yahoo.co.uk>
+
+pkgname=noise-player-bzr
+pkgver=0.4.0.1+r1990
+pkgrel=1
+pkgdesc='The Pantheon Music Player'
+arch=('i686' 'x86_64')
+url='https://launchpad.net/noise'
+license=('GPL3')
+groups=('pantheon')
+depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'glibc'
+         'gst-plugins-base-libs' 'gstreamer' 'gtk3' 'hicolor-icon-theme'
+         'json-glib' 'libaccounts-glib' 'libgda' 'libgee' 'libgpod'
+         'libgsignon-glib' 'libnotify' 'libpeas' 'libsoup' 'pango' 'taglib'
+         'zeitgeist'
+         'libgranite.so')
+makedepends=('bzr' 'cmake' 'gobject-introspection' 'intltool' 'vala')
+optdepends=('gst-plugins-base: "Base" plugin libraries'
+            'gst-plugins-good: "Good" plugin libraries'
+            'gst-plugins-bad: "Bad" plugin libraries'
+            'gst-plugins-ugly: "Ugly" plugin libraries'
+            'gst-libav: Libav plugin')
+provides=('noise' 'noise-player')
+conflicts=('noise' 'noise-player')
+install="noise.install"
+source=('noise::bzr+lp:noise/0.4.x'
+        'mesa-demos-conflict.patch'
+        'noise-install-dirs.patch')
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+pkgver() {
+  cd noise
+
+  echo "0.4.0.1+r$(bzr revno)"
+}
+
+prepare() {
+  cd noise
+
+  patch -Np1 -i ../mesa-demos-conflict.patch
+  patch -Np1 -i ../noise-install-dirs.patch
+
+  if [[ -d build ]]; then
+    rm -rf build
+  fi
+  mkdir build
+}
+
+build() {
+  cd noise/build
+
+  cmake .. \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -DCMAKE_INSTALL_LIBDIR='/usr/lib' \
+    -DGSETTINGS_COMPILE='FALSE'
+  make -j1
+}
+
+package() {
+  cd noise/build
+
+  make -j1 DESTDIR="${pkgdir}" install
+}
+
+# vim: ts=2 sw=2 et:
