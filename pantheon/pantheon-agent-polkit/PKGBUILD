@@ -1,0 +1,48 @@
+pkgname=pantheon-agent-polkit
+pkgver=0.1.0+r33
+pkgrel=1
+pkgdesc='Polkit authorization designed for Pantheon'
+arch=('i686' 'x86_64')
+url='https://launchpad.net/pantheon-agent-polkit'
+license=('GPL3')
+groups=('pantheon')
+depends=('polkit' 'gtk3')
+makedepends=('bzr' 'cmake' 'cmake-elementary' 'intltool' 'vala')
+provides=('pantheon-agent-polkit')
+conflicts=('pantheon-agent-polkit')
+source=('pantheon-agent-polkit::bzr+lp:pantheon-agent-polkit/loki'
+        'pantheon-agent-polkit.desktop')
+sha256sums=('SKIP'
+            'SKIP')
+
+pkgver() {
+  cd pantheon-agent-polkit
+
+  echo "0.1.0+r$(bzr revno)"
+}
+
+build() {
+  cd pantheon-agent-polkit
+
+  if [[ -d build ]]; then
+    rm -rf build
+  fi
+  mkdir build && cd build
+
+  cmake .. \
+    -DCMAKE_BUILD_TYPE='Release' \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -DGSETTINGS_COMPILE='OFF'
+  make
+}
+
+package() {
+  cd pantheon-agent-polkit/build
+
+  make DESTDIR="${pkgdir}" install
+
+  install -Dm644 "$srcdir/pantheon-agent-polkit.desktop" \
+     "$pkgdir/usr/share/applications/pantheon-agent-polkit.desktop .desktop"
+}
+
+# vim: ts=2 sw=2 et:
