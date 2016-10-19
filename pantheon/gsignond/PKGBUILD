@@ -2,17 +2,23 @@
 # Contributor: Josip Ponjavic <josipponjavic@gmail.com>
 
 pkgname=gsignond
-pkgver=1.0.4
+pkgver=1.0.4+r469
 pkgrel=1
 pkgdesc='gSSO glib daemon'
 arch=('i686' 'x86_64')
 url='https://01.org/gsso'
 license=('LGPL2.1')
-depends=('dbus' 'libgsignon-glib' 'sqlite')
+depends=('dbus' 'sqlite')
 makedepends=('git' 'gobject-introspection' 'gtk-doc')
 backup=('etc/gsignond.conf')
-source=('git+https://gitlab.com/accounts-sso/gsignond.git#commit=deb5f757')
+source=('gsignond::bzr+lp:~elementary-os/gsignond/gsignond-loki')
 sha256sums=('SKIP')
+
+pkgver() {
+  cd gsignond
+
+  echo "1.0.4+r$(bzr revno)"
+}
 
 prepare() {
   cd gsignond
